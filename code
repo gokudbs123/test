@@ -1,0 +1,137 @@
+#include <bits/stdc++.h> 
+  
+using namespace std; 
+  
+#define totalprocess 4 
+  
+// Making a struct to hold the given input  
+  
+struct process 
+{ 
+int At,Bt,Pr,Pno; 
+}; 
+  
+process proc[50]; 
+  
+/* 
+using comparator funct for sorting according to priority if  
+same arrival time is their  
+*/
+  
+bool comp(process X,process Y) 
+{ 
+if(X.At == Y.At) 
+{ 
+return X.Pr<Y.Pr; 
+} 
+else
+{ 
+    return X.At<Y.At; 
+} 
+} 
+  
+// FCFS Algorithm for finding Waiting time 
+void get_Wt_time(int Wt[]) 
+{ 
+// declaring service array that stores cumulative burst time  
+int Service[50]; 
+  
+// Initilising variables 
+Service[0]=0; 
+Wt[0]=0; 
+  
+  
+for(int i=1;i<totalprocess;i++) 
+{ 
+Service[i]=proc[i-1].Bt+Service[i-1]; 
+  
+Wt[i]=Service[i]-proc[i].At+1; 
+  
+// If waiting time is negative, change it into zero 
+      
+    if(Wt[i]<0) 
+    { 
+    Wt[i]=0; 
+    } 
+} 
+  
+} 
+  
+void get_Tat_time(int Tat[],int Wt[]) 
+{ 
+// Filling turnaroundtime array 
+  
+for(int i=0;i<totalprocess;i++) 
+{ 
+    Tat[i]=proc[i].Bt+Wt[i]; 
+} 
+      
+} 
+  
+void findgc() 
+{ 
+//Declare waiting time and turnaround time array 
+int Wt[50],Tat[50]; 
+  
+double Wavg=0,Tavg=0; 
+  
+// Function call to find waiting time array 
+get_Wt_time(Wt); 
+// Function call to find turnaround time 
+get_Tat_time(Tat,Wt); 
+      
+int Stime[50],Ctime[50]; 
+Stime[0]=1; 
+Ctime[0]=Stime[0]+Tat[0]; 
+for(int i=1;i<totalprocess;i++) 
+    { 
+        Stime[i]=Ctime[i-1]; 
+        Ctime[i]=Stime[i]+Tat[i]-Wt[i]; 
+    } 
+      
+cout<<"Process_no\tStart_time\tComplete_time\tTurn_Around_Time\tWaiting_Time"<<endl; 
+       
+      
+for(int i=0;i<totalprocess;i++) 
+    { 
+        Wavg += Wt[i]; 
+        Tavg += Tat[i]; 
+          
+        cout<<proc[i].Pno<<"\t\t"<< 
+            Stime[i]<<"\t\t"<<Ctime[i]<<"\t\t"<< 
+            Tat[i]<<"\t\t\t"<<Wt[i]<<endl; 
+    } 
+      
+        // average waiting time 
+        // average turn around time 
+      
+    cout<<"Average waiting time is : "; 
+    cout<<Wavg/(float)totalprocess<<endl; 
+    cout<<"average turnaround time : "; 
+    cout<<Tavg/(float)totalprocess<<endl; 
+  
+} 
+  
+int main() 
+{ 
+int ArrivalTime[] = { 0, 1, 2, 3 }; 
+int BurstTime[] = { 4, 1, 2, 1 }; 
+int Priority[] = { 3, 4, 1, 7 }; 
+      
+for(int i=0;i<totalprocess;i++) 
+{ 
+    proc[i].At=ArrivalTime[i]; 
+    proc[i].Bt=BurstTime[i]; 
+    proc[i].Pr=Priority[i]; 
+    proc[i].Pno=i+1; 
+    }  
+      //sort function 
+      
+    sort(proc,proc+totalprocess,comp); 
+      
+    //findgc function for gantt chart 
+      
+    findgc();  
+  
+    return 0; 
+} 
