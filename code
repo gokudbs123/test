@@ -18,7 +18,7 @@ using comparator funct for sorting according to priority if
 same arrival time is their  
 */
   
-bool comp(process X,process Y) 
+/*bool comp(process X,process Y) 
 { 
 if(X.At == Y.At) 
 { 
@@ -28,7 +28,7 @@ else
 { 
     return X.At<Y.At; 
 } 
-} 
+} */
   
 // FCFS Algorithm for finding Waiting time 
 void get_Wt_time(int Wt[]) 
